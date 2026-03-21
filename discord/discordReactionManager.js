@@ -14,7 +14,7 @@ module.exports = function (RED) {
         text: "Ready"
       });
 
-      var reactionCollectors = [];
+      var reactionCollectors = new Map();
 
       const checkIdOrObject = (check) => {
         try {
@@ -55,6 +55,16 @@ module.exports = function (RED) {
         send = send || node.send.bind(node);
         done = done || function (err) { if (err) { node.error(err, msg); } };
         const message = checkIdOrObject(msg.message);
+
+        if (msg.stop) {
+          if (message && reactionCollectors.has(message)) {
+            reactionCollectors.get(message).stop();
+            reactionCollectors.delete(message);
+          }
+          if (typeof done === 'function') done();
+          return;
+        }
+
         const channel = checkIdOrObject(msg.channel);
         const collectionTime = msg.time || 600000;
 
@@ -80,8 +90,9 @@ module.exports = function (RED) {
           dispose: true,
           remove: true,
         });
-        
-        reactionCollectors.push(collector);
+
+        reactionCollectors.set(message, collector);
+        collector.on('end', () => reactionCollectors.delete(message));
         node.status({
           fill: "green",
           shape: "dot",
@@ -147,6 +158,7 @@ module.exports = function (RED) {
         reactionCollectors.forEach(function (collector) {
           collector.stop();
         });
+        reactionCollectors.clear();
         discordBotManager.closeBot(bot);
       });
 

@@ -44,6 +44,8 @@
     <dd>The channel that holds the message. Needed so the node can look the message up again.</dd>
     <dt class="optional">time <span class="property-type">number</span></dt>
     <dd>How long to keep listening, in milliseconds. Leave blank to use the 10 minute default.</dd>
+    <dt class="optional">stop <span class="property-type">boolean</span></dt>
+    <dd>Set to <code>true</code> to stop listening for reactions on the message specified by <code>msg.message</code>. No other fields are needed.</dd>
   </dl>
 
   <h3>What comes out</h3>
