@@ -72,7 +72,7 @@ module.exports = function (RED) {
 
             if(commandResponseType == "defersReply")
             {              
-              await interaction.deferReply({ephemeral: ephemeral});
+              await interaction.deferReply(ephemeral ? {flags: ['Ephemeral']} : {});
             }    
           }
           else if(interaction.isModalSubmit())
