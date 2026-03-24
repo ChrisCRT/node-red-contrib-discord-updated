@@ -80,10 +80,6 @@ module.exports = function (RED) {
                             payload.flags = flags;
                         }
 
-                        if (allowEphemeral && ephemeral === true) {
-                            payload.ephemeral = true;
-                        }
-
                         return payload;
                     };
 
