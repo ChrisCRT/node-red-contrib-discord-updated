@@ -11,10 +11,10 @@ helper.init(require.resolve('node-red'));
 
 describe('Discord Command Manager Node', function () {
   let getBotStub;
-  let restPostStub;
+  let restPutStub;
 
   beforeEach(function () {
-    restPostStub = sinon.stub(REST.prototype, 'post').resolves([]);
+    restPutStub = sinon.stub(REST.prototype, 'put').resolves([]);
     getBotStub = sinon.stub(discordBotManager, 'getBot').resolves({
       token: 'token123',
       id: 'app123',
@@ -64,8 +64,8 @@ describe('Discord Command Manager Node', function () {
 
       helperNode.on('input', function (msg) {
         try {
-          restPostStub.calledOnce.should.be.true();
-          const body = restPostStub.firstCall.args[1].body;
+          restPutStub.calledOnce.should.be.true();
+          const body = restPutStub.firstCall.args[1].body;
           body.should.be.Array().and.have.length(1);
           const payload = body[0];
           payload.should.have.property('name_localizations');
